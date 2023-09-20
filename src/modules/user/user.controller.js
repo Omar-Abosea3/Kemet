@@ -143,4 +143,4 @@ export const searchForUsers = asyncHandeller(async (req, res, next) => {
 export const logOutUser = asyncHandeller(async (req , res , next) => {
   const user = await userModel.findByIdAndUpdate(req.user._id , {status:'offline' , isLoggedIn:false , token:null});
   return res.status(200).json({message:'success logging out'});
-})
+});
