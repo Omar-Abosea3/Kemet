@@ -152,6 +152,7 @@ export const getOnePlace = asyncHandeller(async (req, res, next) => {
     placeAfterTranslate.desc = await translate(place.desc , lang);
     placeAfterTranslate.placeName = await translate(place.placeName , lang);
     placeAfterTranslate._id = place._id;
+    placeAfterTranslate.images = place.images;
     return res.status(200).json({ message: "success", placeAfterTranslate });
 });
 
