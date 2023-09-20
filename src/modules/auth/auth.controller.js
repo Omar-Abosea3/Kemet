@@ -45,7 +45,7 @@ export const confirmEmail = asyncHandeller(async (req , res , next) => {
     if(!OTP){
         return next(new Error('OTP is required' , {cause:400}))
     }
-    const user = await userModel.findById(id ,{OTP});
+    const user = await userModel.findOne({_id:id ,OTP});
     if(!user){
         return next(new Error('invalid OTP' , {cause:404}))
     }
