@@ -39,7 +39,7 @@ const authentication = (roles) => {
           const refreshedToken = jwt.sign(
             { email: findUser.email, id: findUser._id, isLoggedIn: true },
             process.env.TOKEN_SECRET,
-            { expiresIn: "24h" }
+            { expiresIn: "23h" }
           );
           if (!refreshedToken) {
             return next(
