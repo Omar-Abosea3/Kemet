@@ -37,9 +37,6 @@ export const addProfilePicture = asyncHandeller(async (req, res, next) => {
 });
 
 export const getAllUsers = asyncHandeller(async (req, res, next) => {
-  if (req.user.role != "SuperAdmin") {
-    return next(new Error("you not have permission to do this" , { cause: 403 }));
-  }
   const users = await userModel.find();
   if (users.length == 0) {
     return next(new Error("no users found" , { cause: 403 }));
@@ -58,9 +55,6 @@ export const deleteUser = asyncHandeller(async (req, res, next) => {
       return next(new Error("you not have permission to do this", { cause: 403 }));
     }
     deletedUser = await userModel.findByIdAndDelete(id);
-    if (deletedUser) {
-      return next(new Error("this user not founded", { cause: 404 }));
-    }
     await cloudinary.api.delete_resources_by_prefix(`${process.env.PROJECT_FOLDER}/Users/${deletedUser.customId}`);
     await cloudinary.api.delete_folder(`${process.env.PROJECT_FOLDER}/Users/${deletedUser.customId}`);
     req.imagePath = `${process.env.PROJECT_FOLDER}/Users/${deletedUser.customId}`;
