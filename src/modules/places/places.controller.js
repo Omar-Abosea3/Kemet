@@ -133,7 +133,8 @@ export const getAllPlaces = asyncHandeller(async (req, res, next) => {
     const desc = await translate(place.desc , lang);
     const placeName = await translate(place.placeName , lang);
     const _id = place._id;
-    placesAfterTranslate.push({desc , placeName , _id});
+    const images = place.images;
+    placesAfterTranslate.push({desc , placeName , _id , images});
   }
   return res.status(200).json({ message: "success", placesAfterTranslate  });
 });
