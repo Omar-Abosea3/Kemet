@@ -47,12 +47,12 @@ export const addPlace = asyncHandeller(async (req, res, next) => {
     if (!post) {
       await cloudinary.api.delete_resources(publicIds);
       return next(
-        new Error("post not added , try again later", { cause: 400 })
+        new Error("place not added , try again later", { cause: 400 })
       );
     }
     return res
       .status(201)
-      .json({ message: "post added successfully", post });
+      .json({ message: "place added successfully", post });
 });
 
 export const updatePlace = asyncHandeller(async (req, res, next) => {
