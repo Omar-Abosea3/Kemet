@@ -20,7 +20,7 @@ export const signUp = asyncHandeller(async(req , res , next) => {
     const userName = firstName + ' ' + lastName;
     const hashPassword = bcryptjs.hashSync(password , parseInt(process.env.NUMOFHASH));
     const user = await userModel.create({firstName , lastName , userName , email , password:hashPassword ,  phone , age , gender , role });
-    sendEmail({to:user.email , subject:"e-commerce" ,text:'success signUp , please virefy your email with otp'})
+    sendEmail({to:user.email , subject:"Kemet" ,text:'success signUp , please virefy your email with otp'})
     return res.status(200).json({message:'success' , user});
 });
 
@@ -36,7 +36,7 @@ export const generateOTP = asyncHandeller(async(req , res , next) => {
     const OTP = await generateOTPFunction();
     user.OTP = OTP;
     await user.save();
-    sendEmail({to:user.email , subject:"e-commerce" , text : `your OTP code is ${OTP}`});
+    sendEmail({to:user.email , subject:"Kemet" , text : `your OTP code is ${OTP}`});
     return res.status(201).json({message:'email founded and your OTP is generated' , userId : user._id});
 });
 
