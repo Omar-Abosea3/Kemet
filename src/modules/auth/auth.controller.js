@@ -55,7 +55,7 @@ export const confirmEmail = asyncHandeller(async (req , res , next) => {
     user.isConfirmEmail = true;
     user.OTP=null;
     await user.save();
-    return res.status(200).json({message:'done,you can signin now!' , user});
+    return res.status(200).json({message:'success' , user});
 });
 
 export const unsupscribeEmail = asyncHandeller(async(req , res , next) => {
