@@ -102,7 +102,8 @@ export const resetPassword = asyncHandeller(async(req , res , next) => {
     const hashPassword = bcryptjs.hashSync(password , parseInt(process.env.NUMOFHASH));
     user.password = hashPassword;
     user.OTP = null;
-    return res.status(200).json({message:'success , you can login by new password now'});
+    await user.save();
+    return res.status(200).json({message:'success'});
 });
 
 export const signIn = asyncHandeller(async(req , res , next) => {
