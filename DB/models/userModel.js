@@ -71,7 +71,6 @@ const userSchema = new Schema({
         enum:['online' , 'offline']
     },
     OTP:Number,
-    token:String,
 },{
     timestamps:true,
 });
