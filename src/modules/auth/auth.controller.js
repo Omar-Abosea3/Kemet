@@ -30,9 +30,9 @@ export const generateOTP = asyncHandeller(async(req , res , next) => {
     if(!user){
         return next(new Error('this user is not found' , {cause:404}));
     }
-    if(user.isConfirmEmail){
-        return next(new Error('this user is already confirmed his email' , {cause:400}));
-    }
+    // if(user.isConfirmEmail){
+    //     return next(new Error('this user is already confirmed his email' , {cause:400}));
+    // }
     const OTP = await generateOTPFunction();
     user.OTP = OTP;
     await user.save();
