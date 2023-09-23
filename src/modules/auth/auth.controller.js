@@ -124,5 +124,5 @@ export const signIn = asyncHandeller(async(req , res , next) => {
     const token = jwt.sign({email:user.email , id:user._id , isLoggedIn:true} , process.env.TOKEN_SECRET);
     user.status = 'online';
     await user.save();
-    return res.status(201).json({message:'success' , user });
+    return res.status(201).json({message:'success' , user , token});
 });
