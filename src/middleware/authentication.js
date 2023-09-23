@@ -1,66 +1,30 @@
 import  jwt  from "jsonwebtoken";
 import userModel from "../../DB/models/userModel.js";
+import { asyncHandeller } from "../utils/errorHandlig.js";
 
 const authentication = (roles) => {
-  return async (req, res, next) => {
-    try {
-      const { bearertoken } = req.headers;
-      console.log(bearertoken);
-      if (!bearertoken) {
-        return next(new Error("not authenticated user", { cause: 400 }));
-      }
-      const token = bearertoken.split("_")[2];
-      console.log(token);
-      try {
-        console.log(jwt.verify(token, process.env.TOKEN_SECRET));
-        const decoded = jwt.verify(token, process.env.TOKEN_SECRET);
-        console.log(decoded.id);
-        const user = await userModel.findById(decoded.id);
-        console.log(user);
-        if (!user) {
-          return next(new Error("not founded user", { cause: 404 }));
-        }
-        if(!roles.includes(user.role)){
-          return next(new Error('unAuthorized to access this api' , {cause:401}));
-        }
-        req.user = user;
-        next();
-      } catch (error) {
-        console.log(error);
-        console.log(process.env.TOKEN_SECRET);
-        if (error == "TokenExpiredError: jwt expired") {
-          // searching for user by expired token that have been stored in data base .
-          const findUser = await userModel.findOne({ token: token });
-          if (!findUser) {
-            return next(new Error("wrong token", { cause: 404 }));
+  return asyncHandeller(async ( req , res , next) => {
+          const {token} = req.headers;
+          if(!token){
+              return next(new Error('not authenticated user or in-valid bearer key' , {cause:401}));
           }
-          console.log(findUser);
-          // generate new token .
-          const refreshedToken = jwt.sign(
-            { email: findUser.email, id: findUser._id, isLoggedIn: true },
-            process.env.TOKEN_SECRET,
-            { expiresIn: "23h" }
-          );
-          if (!refreshedToken) {
-            return next(
-              new Error("token generation fail, payload canot be empty", {
-                cause: 400,
-              })
-            );
+          const decoded = jwt.verify(token , process.env.TOKEN_SECRET);
+          if(!decoded?.id){
+              return next(new Error('in-valid token payload' , {cause:400}));
           }
-          // store new token in data base .
-          findUser.token = refreshedToken;
-          await findUser.save();
-          return res
-            .status(200)
-            .json({ message: "token refreshed", refreshedToken });
-        }
-        return next(new Error("invalid Token", { cause: 400 }));
-      }
-    } catch (error) {
-      return next(new Error("error in auth", { cause: 500 }));
-    }
-  };
+          const user = await userModel.findById(decoded.id);
+          if(!user){
+              return next(new Error('user not found' , {cause:404}))
+          }
+          if(!user.isLoggedIn){
+              return next(new Error('you are not logged in , please log in first' , {cause:400}))
+          }
+          if(!roles.includes(user.role)){
+            return next(new Error('unAuthorized to access this api' , {cause:401}));
+          }
+          req.user = user;
+          return next();   
+  })
 };
 
 export default authentication;
