@@ -86,7 +86,7 @@ export const forgetPassword = asyncHandeller(async(req , res , next) => {
         return next(new Error('you must confirm your email first' , {cause:400}))
     }
     await user.save();
-    return res.status(200).json({message:'done,you can reset your password now' , user});
+    return res.status(200).json({message:'success' , user});
 });
 
 export const resetPassword = asyncHandeller(async(req , res , next) => {
