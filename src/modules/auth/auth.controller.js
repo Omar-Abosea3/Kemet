@@ -82,7 +82,7 @@ export const forgetPassword = asyncHandeller(async(req , res , next) => {
     if(!user){
         return next(new Error('invalid OTP' , {cause:404}))
     }
-    if(!user.isConfirmEmail){
+    if(user.isConfirmEmail == false){
         return next(new Error('you must confirm your email first' , {cause:400}))
     }
     await user.save();
@@ -123,6 +123,7 @@ export const signIn = asyncHandeller(async(req , res , next) => {
     }
     const token = jwt.sign({email:user.email , id:user._id , isLoggedIn:true} , process.env.TOKEN_SECRET);
     user.status = 'online';
+    console.log(token);
     await user.save();
     return res.status(201).json({message:'success' , user , token});
 });
