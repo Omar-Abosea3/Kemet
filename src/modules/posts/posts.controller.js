@@ -140,7 +140,10 @@ export const getAllPosts = asyncHandeller(async (req, res, next) => {
 
 export const getUserPosts = asyncHandeller(async (req, res, next) => {
   const { lang } = req.query;
-  const posts = await postModel.find({createdBy:req.user._id});
+  const posts = await postModel.find({createdBy:req.user._id}).populate({
+    path:'createdBy',
+    select:'userName profile_pic'
+  });
   if (!posts.length) {
     return next(new Error("this user not have any posts", { cause: 404 }));
   }
