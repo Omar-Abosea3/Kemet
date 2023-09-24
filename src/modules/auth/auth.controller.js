@@ -21,7 +21,7 @@ export const signUp = asyncHandeller(async(req , res , next) => {
     const hashPassword = bcryptjs.hashSync(password , parseInt(process.env.NUMOFHASH));
     const user = await userModel.create({firstName , lastName , userName , email , password:hashPassword ,  phone , age , gender , role });
     sendEmail({to:user.email , subject:"Kemet" ,text:'success signUp , please virefy your email with otp'})
-    return res.status(200).json({message:'success' , user});
+    return res.status(201).json({message:'success' , user});
 });
 
 export const generateOTP = asyncHandeller(async(req , res , next) => {
@@ -126,5 +126,5 @@ export const signIn = asyncHandeller(async(req , res , next) => {
     user.status = 'online';
     console.log(token);
     await user.save();
-    return res.status(201).json({message:'success' , user , token});
+    return res.status(209).json({message:'success' , user , token});
 });
