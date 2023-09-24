@@ -95,7 +95,7 @@ export const resetPassword = asyncHandeller(async(req , res , next) => {
     if(password != repassword){
         return next(new Error('password and repassword is not matched' , {cause:400}));
     }
-    const user = await userModel.findById(id , {OTP});
+    const user = await userModel.findOne({_id:id, OTP});
     if(!user){
         return next(new Error('this user is not found or not have this OTP Code' , {cause:404}));
     }
