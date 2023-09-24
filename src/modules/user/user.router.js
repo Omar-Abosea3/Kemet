@@ -13,7 +13,7 @@ router.post('/profile_pic' , authentication(roleSecurity.available) , logOutMidd
 router.get('/' , authentication(roleSecurity.private) , logOutMiddleware , user.getAllUsers);
 router.delete('/' , authentication(roleSecurity.available) , logOutMiddleware , validationCoreFunction(deleteUserSchema) , user.deleteUser);
 router.put('/' , authentication(roleSecurity.available) , logOutMiddleware , validationCoreFunction(updateUserSchema) , user.updateProfile);
-router.get('/profile' , authentication(roleSecurity.available) , logOutMiddleware , user.getProfileInfo);
+router.get('/profile/:id' , authentication(roleSecurity.available) , logOutMiddleware , user.getProfileInfo);
 router.get('/search' , authentication(roleSecurity.private) , logOutMiddleware , user.searchForUsers);
 router.get('/logout' , authentication(roleSecurity.available) , logOutMiddleware , user.logOutUser);
 
