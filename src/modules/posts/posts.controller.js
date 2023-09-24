@@ -120,7 +120,10 @@ export const deletePost = asyncHandeller(async (req, res, next) => {
 
 export const getAllPosts = asyncHandeller(async (req, res, next) => {
   const { lang } = req.query;
-  const posts = await postModel.find();
+  const posts = await postModel.find().populate({
+    path:'createdBy',
+    select:'userName profile_pic'
+  });
   if (posts.length == 0) {
     return next(new Error("no posts founded", { cause: 404 }));
   }
