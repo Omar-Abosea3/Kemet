@@ -11,7 +11,7 @@ const multerFunction = (allowedEstensionsArray) => {
     console.log(allowedEstensions);
     const fileFilter = (req , file , cb) => {
         console.log(file.mimetype);
-        if(!allowedEstensionsArray.includes(file.mimetype)){
+        if(!allowedEstensionsArray.Images.includes(file.mimetype)){
             cb(new Error('invalid extension', { cause: 400 }), false)
         }
         return cb(null , true);
