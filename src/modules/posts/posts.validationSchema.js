@@ -1,24 +1,6 @@
 import joi from "joi";
 import {generalFields} from '../../middleware/validation.js'
 
-export const addPostSchema = {
-    body:joi.object({
-        desc:generalFields.desc.optional(), 
-        location:generalFields.location.required(),
-    }).required(),
-};
-
-export const updatePostSchema = {
-    body:joi.object({
-        desc:generalFields.desc, 
-        location:generalFields.location,
-    }).required(),
-
-    query:joi.object({
-        postId:generalFields._id.required(),
-    }).required()
-};
-
 export const deletePostSchema = {
     params:joi.object({
         id : generalFields._id.required(),
