@@ -9,7 +9,7 @@ import { roleSecurity } from "../../utils/systemRoles.js";
 import { addPostSchema, deletePostSchema, getPostSchema, makeLikesSchema, updatePostSchema } from "./posts.validationSchema.js";
 const router = Router();
 
-router.post('/'  , authentication(roleSecurity.available) , logOutMiddleware ,   multerFunction(allowedEstensions.Images).array('image' , 3) , validationCoreFunction(addPostSchema), post.addPost);
+router.post('/'  , authentication(roleSecurity.available) , logOutMiddleware ,   multerFunction(allowedEstensions.Images).array('image' , 3) , post.addPost);
 router.put('/' , authentication(roleSecurity.available) , logOutMiddleware , multerFunction(allowedEstensions.Images).array('image' , 3)  , validationCoreFunction(updatePostSchema) , post.updatePost);
 router.delete('/:id', authentication(roleSecurity.available) , logOutMiddleware , validationCoreFunction(deletePostSchema) , post.deletePost);
 router.get('/' , authentication(roleSecurity.available), logOutMiddleware , validationCoreFunction(getPostSchema) ,post.getAllPosts);
