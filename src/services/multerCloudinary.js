@@ -10,6 +10,7 @@ const multerFunction = (allowedEstensionsArray) => {
     const storage = multer.diskStorage({});
     console.log(allowedEstensionsArray);
     const fileFilter = (req , file , cb) => {
+        console.log(file);
         if(!allowedEstensionsArray.includes(file.mimetype)){
             console.log(file.mimetype);
             cb(new Error('invalid extension', { cause: 400 }), false)
