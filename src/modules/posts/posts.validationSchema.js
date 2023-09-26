@@ -4,8 +4,8 @@ import {generalFields} from '../../middleware/validation.js'
 export const addPostSchema = {
     body:joi.object({
         desc:generalFields.desc.optional(), 
-        location:generalFields.location,
-    }).required().options({presence:'required'})
+        location:generalFields.location.required(),
+    }).required(),
 };
 
 export const updatePostSchema = {
