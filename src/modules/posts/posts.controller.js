@@ -11,6 +11,7 @@ export const addPost = asyncHandeller(async (req, res, next) => {
     if(!location){
       return next(new Error('you must send me location' , {cause:400}))
     }
+    console.log(req.files , req.files.length);
     if (!req.files?.length) {
       return next(new Error("please upload pictures", { cause: 400 }));
     }

@@ -83,6 +83,6 @@ export const generalFields = {
         "string.max" : "maximum 80 charachters",
         "string.base" : "this must be a string"
     }),
-    location:joi.string().regex(/^(http(s):\/\/.)[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/),
+    location:joi.string(),
     lang: joi.string().max(4)
 }
