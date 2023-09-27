@@ -187,5 +187,5 @@ export const makeLikes = asyncHandeller(async (req , res , next) => {
     post.likesCounter = post.likes.length;
   }
   await post.save();
-  return res.status(200).json({message:'success' , likesCounter:post.likesCounter});
+  return res.status(200).json({message:'success' , likesCounter:post.likesCounter , likes:post.likes});
 });
