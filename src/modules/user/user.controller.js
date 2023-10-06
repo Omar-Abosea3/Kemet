@@ -100,6 +100,7 @@ export const updateProfile = asyncHandeller(async (req, res, next) => {
       );
     }
     user.firstName = firstName;
+    user.userName = firstName + ' ' + user.lastName; 
   }
   if (lastName) {
     if (user.lastName == lastName) {
@@ -108,6 +109,16 @@ export const updateProfile = asyncHandeller(async (req, res, next) => {
       );
     }
     user.lastName = lastName;
+    user.userName = user.firstName + ' ' + lastName; 
+  }
+
+  if(lastName && firstName){
+    if (user.firstName == firstName || user.lastName == lastName) {
+      return next(
+        new Error("your first name and last name is same as your old one", { cause: 400 })
+      );
+    }
+    user.userName = firstName + ' ' + lastName;
   }
   await user.save();
   return res.status(200).json({ message: "updated done", user });
