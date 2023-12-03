@@ -35,7 +35,7 @@ export const addMonument = asyncHandeller(async (req, res, next) => {
 export const updateMonument = asyncHandeller(async (req, res, next) => {
     const {  desc , monumentName } = req.body;
     const { monumentId } = req.query;
-    const monument = await monumentsModel.findOne({_id:monumentId ,createdBy:req.user._id});
+    const monument = await monumentsModel.findOne({_id:monumentId});
     if (!monument) {
       return next(new Error("not founded monument or not authorized to update it", { cause: 400 }));
     }
