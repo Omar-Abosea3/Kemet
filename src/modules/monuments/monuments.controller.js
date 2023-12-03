@@ -104,5 +104,6 @@ export const getOneMonument = asyncHandeller(async (req, res, next) => {
     monumentAfterTranslate.desc = await translate(monument.desc , lang);
     monumentAfterTranslate.monumentName = await translate(monument.monumentName , lang);
     monumentAfterTranslate._id = monument._id;
+    monumentAfterTranslate.images = monument.images;
     return res.status(200).json({ message: "success", monumentAfterTranslate });
 });
