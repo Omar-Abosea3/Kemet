@@ -2,6 +2,8 @@ import { asyncHandeller } from "../../utils/errorHandlig.js";
 import { roleSecurity } from "../../utils/systemRoles.js";
 import monumentsModel from "../../../DB/models/monumentsModel.js";
 import translate from "translate";
+import { nanoid } from "nanoid";
+import cloudinary from "../../utils/cloudinaryConfigration.js";
 export const addMonument = asyncHandeller(async (req, res, next) => {
     const { desc  , monumentName} = req.body;
     if(!monumentName){
@@ -48,6 +50,28 @@ export const updateMonument = asyncHandeller(async (req, res, next) => {
         return next(new Error('change thing in monumentName this is the same last one' , {cause:400}));
       }
       monument.monumentName = monumentName;
+    }
+    if (req.files?.length) {
+      const customId = nanoid();
+      console.log(req.file);
+      const images = [];
+      for (const file of req.files) {
+        const { secure_url, public_id } = await cloudinary.uploader.upload(
+          file.path,
+          {
+            folder: `${process.env.PROJECT_FOLDER}/Monuments/${customId}`,
+          }
+        );
+        images.push({ secure_url, public_id });
+      }
+      req.imagePath = `${process.env.PROJECT_FOLDER}/Monuments/${customId}`;
+      // const publicIds = [];
+      // for (const image of monument.images) {
+      //   publicIds.push(image.public_id);
+      // }
+      // await cloudinary.api.delete_resources(publicIds);
+      monument.images = images;
+      monument.customId = customId;
     }
     monument.updatedBy = req.user._id;
     await monument.save();

@@ -24,7 +24,18 @@ const monumentsSchema = new Schema({
     deletedBy:{
         type:Schema.Types.ObjectId,
         ref:'User',
-    }
+    },
+    customId:String,
+    images:[{
+        secure_url:{
+            type : String ,
+            required:true
+        },
+        public_id:{
+            type : String ,
+            required:true
+        }
+    }],
 },{
     timestamps:true
 })

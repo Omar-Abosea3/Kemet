@@ -5,7 +5,7 @@ const postSchema = new Schema({
         type:String,
         trim:true
     },
-    customId:String,
+    
     createdBy:{
         type:Schema.Types.ObjectId,
         ref:'User',
