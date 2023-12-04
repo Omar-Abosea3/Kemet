@@ -139,9 +139,13 @@ export const getAllPlaces = asyncHandeller(async (req, res, next) => {
     const placeName = await translate(place.placeName , lang);
     const _id = place._id;
     const images = place.images;
-    placesAfterTranslate.push({desc , placeName , _id , images});
+    let location;
+    if(place.location){
+      location = place.location;
+    }
+    placesAfterTranslate.push({desc , placeName , _id , images , location});
   }
-  return res.status(200).json({ message: "success", placesAfterTranslate  });
+  return res.status(200).json({ message: "success", placesAfterTranslate });
 });
 
 export const getOnePlace = asyncHandeller(async (req, res, next) => {
