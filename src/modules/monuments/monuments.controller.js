@@ -74,6 +74,9 @@ export const updateMonument = asyncHandeller(async (req, res, next) => {
       monument.customId = customId;
     }
     monument.updatedBy = req.user._id;
+    if(!monument.createdBy){
+      monument.createdBy = req.user._id;
+    }
     await monument.save();
     return res.status(200).json({ message: "updated success", monument });
 });
