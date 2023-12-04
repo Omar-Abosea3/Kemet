@@ -36,6 +36,7 @@ const placeSchema = new Schema({
             required:true,
         }
     }],
+    location:String
 },{
     timestamps:true
 })

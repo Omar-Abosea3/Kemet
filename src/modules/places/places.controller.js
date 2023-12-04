@@ -16,7 +16,6 @@ export const addPlace = asyncHandeller(async (req, res, next) => {
     }
     if(!desc){
       return next(new Error('you must send me description' , {cause:400}));
-
     }
     if (!req.files?.length) {
       return next(new Error("please upload pictures", { cause: 400 }));
@@ -56,7 +55,7 @@ export const addPlace = asyncHandeller(async (req, res, next) => {
 });
 
 export const updatePlace = asyncHandeller(async (req, res, next) => {
-    const {  desc , placeName } = req.body;
+    const {  desc , placeName , location } = req.body;
     const { placeId } = req.query;
     const place = await placeModel.findOne({_id:placeId ,createdBy:req.user._id});
     if (!place) {
@@ -67,6 +66,12 @@ export const updatePlace = asyncHandeller(async (req, res, next) => {
         return next(new Error('change thing in description this is duplicated or the same last one' , {cause:400}));
       }
       place.desc = desc;
+    }
+    if(location){
+      if(place.location == location){
+        return next(new Error('change thing in location this is duplicated or the same last one' , {cause:400}));
+      }
+      place.location = location;
     }
     if( placeName ){
       if(place.placeName == placeName || await placeModel.findOne({placeName})){
