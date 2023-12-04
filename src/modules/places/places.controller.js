@@ -57,7 +57,7 @@ export const addPlace = asyncHandeller(async (req, res, next) => {
 export const updatePlace = asyncHandeller(async (req, res, next) => {
     const {  desc , placeName , location } = req.body;
     const { placeId } = req.query;
-    const place = await placeModel.findOne({_id:placeId ,createdBy:req.user._id});
+    const place = await placeModel.findOne({_id:placeId});
     if (!place) {
       return next(new Error("not founded place or not authorized to update it", { cause: 400 }));
     }
