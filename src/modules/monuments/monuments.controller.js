@@ -107,3 +107,23 @@ export const getOneMonument = asyncHandeller(async (req, res, next) => {
     monumentAfterTranslate.images = monument.images;
     return res.status(200).json({ message: "success", monumentAfterTranslate });
 });
+
+export const getAllMonuments = asyncHandeller(async (req, res, next) => {
+  const { lang } = req.query;
+  const Monuments = await monumentsModel.find();
+  if (Monuments.length == 0) {
+    return next(new Error("no places founded", { cause: 404 }));
+  }
+  if(!lang){
+    return res.status(200).json({ message: "success", Monuments  });
+  }
+  const placesAfterTranslate = [];
+  for (const monument  of Monuments) {
+    const desc = await translate(monument.desc , lang);
+    const monumentName = await translate(monument.monumentName , lang);
+    const _id = monument._id;
+    const images = monument.images;
+    monumentsAfterTranslate.push({desc , monumentName , _id , images});
+  }
+  return res.status(200).json({ message: "success", monumentsAfterTranslate  });
+});

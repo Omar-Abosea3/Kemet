@@ -32,3 +32,9 @@ export const getMonumentSchema = {
         lang : generalFields.lang
     }).required(),
 };
+
+export const getAllMonumentsSchema = {
+    query:joi.object({
+        lang:generalFields.lang
+    }).required(),
+};
