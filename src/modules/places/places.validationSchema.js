@@ -13,6 +13,7 @@ export const updatePlaceSchema = {
     body:joi.object({
         desc:generalFields.desc, 
         placeName:generalFields.placeName,
+        location:joi.string().optional(),
     }).required(),
 
     query:joi.object({
