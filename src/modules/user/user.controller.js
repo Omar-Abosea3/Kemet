@@ -2,6 +2,7 @@ import { nanoid } from "nanoid";
 import userModel from "../../../DB/models/userModel.js";
 import cloudinary from "../../utils/cloudinaryConfigration.js";
 import { asyncHandeller } from "../../utils/errorHandlig.js";
+import postModel from "../../../DB/models/postModel.js";
 
 export const addProfilePicture = asyncHandeller(async (req, res, next) => {
   const user = await userModel.findById(req.user._id);
@@ -47,6 +48,7 @@ export const getAllUsers = asyncHandeller(async (req, res, next) => {
 export const deleteUser = asyncHandeller(async (req, res, next) => {
   const { id } = req.query;
   let deletedUser;
+  let deletedPosts;
   if (id) {
     if (req.user.role != "SuperAdmin") {
       return next(new Error("you not have permission to do this", { cause: 403 }));
@@ -58,12 +60,14 @@ export const deleteUser = asyncHandeller(async (req, res, next) => {
     await cloudinary.api.delete_resources_by_prefix(`${process.env.PROJECT_FOLDER}/Users/${deletedUser.customId}`);
     await cloudinary.api.delete_folder(`${process.env.PROJECT_FOLDER}/Users/${deletedUser.customId}`);
     req.imagePath = `${process.env.PROJECT_FOLDER}/Users/${deletedUser.customId}`;
+    deletedPosts = await postModel.deleteOne({createdBy:id});
   }
   deletedUser = await userModel.findByIdAndDelete(req.user._id);
   await cloudinary.api.delete_resources_by_prefix(`${process.env.PROJECT_FOLDER}/Users/${deletedUser.customId}`);
   await cloudinary.api.delete_folder(`${process.env.PROJECT_FOLDER}/Users/${deletedUser.customId}`);
   req.imagePath = `${process.env.PROJECT_FOLDER}/Users/${deletedUser.customId}`;
-  return res.status(200).json({ message: "deleted success", deletedUser });
+  deletedPosts = await postModel.deleteOne({createdBy:req.user._id});
+  return res.status(200).json({ message: "deleted success", deletedUser , deletedPosts });
 });
 
 export const updateProfile = asyncHandeller(async (req, res, next) => {
