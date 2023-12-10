@@ -56,17 +56,51 @@ export const deleteUser = asyncHandeller(async (req, res, next) => {
     if(await userModel.findById(id).role == "SuperAdmin"){
       return next(new Error("you not have permission to do this", { cause: 403 }));
     }
+    posts = await postModel.find({createdBy:id});
     deletedUser = await userModel.findByIdAndDelete(id);
     await cloudinary.api.delete_resources_by_prefix(`${process.env.PROJECT_FOLDER}/Users/${deletedUser.customId}`);
     await cloudinary.api.delete_folder(`${process.env.PROJECT_FOLDER}/Users/${deletedUser.customId}`);
     req.imagePath = `${process.env.PROJECT_FOLDER}/Users/${deletedUser.customId}`;
     deletedPosts = await postModel.deleteOne({createdBy:id});
+    if(posts.length){
+      const publicIds = [];
+      const customIds =[];
+      for (const post of posts) {
+        customIds.push(post.customId);
+        for (const postimage of post.images) {
+          publicIds.push(postimage.public_id);
+        }
+      }
+      await cloudinary.api.delete_resources(publicIds);
+      for (const customId of customIds) {
+        await cloudinary.api.delete_folder(
+          `${process.env.PROJECT_FOLDER}/Posts/${customId}`
+        );
+      }
+    }
   }
+  posts = await postModel.find({createdBy:req.user._id});
   deletedUser = await userModel.findByIdAndDelete(req.user._id);
   await cloudinary.api.delete_resources_by_prefix(`${process.env.PROJECT_FOLDER}/Users/${deletedUser.customId}`);
   await cloudinary.api.delete_folder(`${process.env.PROJECT_FOLDER}/Users/${deletedUser.customId}`);
   req.imagePath = `${process.env.PROJECT_FOLDER}/Users/${deletedUser.customId}`;
   deletedPosts = await postModel.deleteOne({createdBy:req.user._id});
+  if(posts.length){
+    const publicIds = [];
+    const customIds =[];
+    for (const post of posts) {
+      customIds.push(post.customId);
+      for (const postimage of post.images) {
+        publicIds.push(postimage.public_id);
+      }
+    }
+    await cloudinary.api.delete_resources(publicIds);
+    for (const customId of customIds) {
+      await cloudinary.api.delete_folder(
+        `${process.env.PROJECT_FOLDER}/Posts/${customId}`
+      );
+    }
+  }
   return res.status(200).json({ message: "deleted success", deletedUser , deletedPosts });
 });
 
