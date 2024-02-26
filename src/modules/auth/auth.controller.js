@@ -3,7 +3,7 @@ import sendEmail from "../../utils/email.js";
 import { asyncHandeller } from "../../utils/errorHandlig.js";
 import bcryptjs from "bcryptjs";
 import jwt from 'jsonwebtoken';
-import generateOTPFunction from "../../utils/generateOTP.js";
+import generateOTPFunction, { checkOtpValidation } from "../../utils/generateOTP.js";
 
 export const signUp = asyncHandeller(async(req , res , next) => {
     const {firstName , lastName , email , password , repassword , phone , age , gender , role} =req.body;
@@ -33,7 +33,7 @@ export const generateOTP = asyncHandeller(async(req , res , next) => {
     // if(user.isConfirmEmail){
     //     return next(new Error('this user is already confirmed his email' , {cause:400}));
     // }
-    const OTP = await generateOTPFunction();
+    const OTP = generateOTPFunction();
     user.OTP = OTP;
     await user.save();
     sendEmail({to:user.email , subject:"Kemet" , text : `your OTP code is ${OTP}`});
@@ -48,6 +48,10 @@ export const confirmEmail = asyncHandeller(async (req , res , next) => {
     const user = await userModel.findOne({_id:id ,OTP:OTP});
     if(!user){
         return next(new Error('invalid OTP' , {cause:404}))
+    }
+    const otpValidationResult = checkOtpValidation(user);
+    if(!otpValidationResult){
+        return next(new Error('OTP has expired' , {cause:400}));
     }
     if(user.isConfirmEmail){
         return next(new Error('you are already confirmed' , {cause:400}))
@@ -81,6 +85,10 @@ export const forgetPassword = asyncHandeller(async(req , res , next) => {
     const user = await userModel.findOne({_id:id ,OTP});
     if(!user){
         return next(new Error('invalid OTP' , {cause:404}))
+    }
+    const otpValidationResult = checkOtpValidation(user);
+    if(!otpValidationResult){
+        return next(new Error('OTP has expired' , {cause:400}));
     }
     if(user.isConfirmEmail == false){
         return next(new Error('you must confirm your email first' , {cause:400}))

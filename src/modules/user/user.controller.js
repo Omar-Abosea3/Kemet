@@ -11,7 +11,7 @@ export const addProfilePicture = asyncHandeller(async (req, res, next) => {
   }
   if (!user.customId) {
     const customId = nanoid();
-    const { public_id, secure_url } = await cloudinary.uploader.upload(
+    const { public_id , secure_url } = await cloudinary.uploader.upload(
       req.file.path,
       {
         folder: `${process.env.PROJECT_FOLDER}/Users/${customId}`,
@@ -98,7 +98,7 @@ export const deleteUser = asyncHandeller(async (req, res, next) => {
     for (const customId of customIds) {
       await cloudinary.api.delete_folder(
         `${process.env.PROJECT_FOLDER}/Posts/${customId}`
-      );
+      ); 
     }
   }
   return res.status(200).json({ message: "deleted success", deletedUser , deletedPosts });
