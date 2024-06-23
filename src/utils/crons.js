@@ -26,9 +26,20 @@ export const removeNonConfirmedAccount = () => {
 };
 
 export const refreshCharitiesServer = () => {
-    scheduleJob('*/5 * * * *', async () => {
+    scheduleJob('*/15 * * * *', async () => {
         try {
             const {data} = await axios.get(`https://charities-donations.onrender.com`);
+            console.log(data);
+        }catch(error){
+            console.log("error");
+        }
+    })
+}
+
+export const refreshEcommerceServer = () => {
+    scheduleJob('*/15 * * * *', async () => {
+        try {
+            const {data} = await axios.get(`https://ecommerce-rby0.onrender.com`);
             console.log(data);
         }catch(error){
             console.log("error");
