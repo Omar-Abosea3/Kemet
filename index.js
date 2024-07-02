@@ -7,8 +7,6 @@ import { refreshCharitiesServer, refreshEcommerceServer, removeNonConfirmedAccou
 dotenv.config({path:path.resolve('./configs/.env')});
 const app = express();
 const port = 5000;
-refreshCharitiesServer();
 removeNonConfirmedAccount();
-refreshEcommerceServer();
 bootstrap(app , express);
 app.listen(parseInt(process.env.PORT) || port , _=>{console.log(`running on .... ${parseInt(process.env.PORT)}`)});
